@@ -1,0 +1,30 @@
+services:
+  postgres:
+    container_name: postgres-sql-ss
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      PGDATA: /var/lib/postgressql/data
+      POSTGRES_DB: spring_security
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - 5432:5432
+    networks:
+      - spring-demo
+    restart: unless-stopped
+  mail-dev:
+    container_name: mail-dev-ss
+    image: maildev/maildev
+    ports:
+      - 1080:1080
+      - 1025:1025
+
+  networks:
+    spring-demo:
+      driver: bridge
+
+  volumes:
+    postgres:
+      driver: local
