@@ -1,0 +1,33 @@
+#this inherits from application.yml
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/book_social_network
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSLDialect
+
+mail:
+  host: localhost
+  port: 1025
+  username: iheb
+  password: iheb
+  properties:
+    mail:
+      smtp:
+        trust: "*"
+      auth: true
+      starttls:
+        enable: true
+      connectiontimout: 5000
+      timeout: 3000
+      writetimout: 5000
