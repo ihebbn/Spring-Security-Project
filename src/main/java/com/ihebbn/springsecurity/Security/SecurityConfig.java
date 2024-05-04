@@ -48,7 +48,7 @@ public class SecurityConfig {
                                     .authenticated()
                         )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-                .authenticationProvider(authentificationProvider)
+                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
 
