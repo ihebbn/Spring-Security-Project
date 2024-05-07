@@ -3,6 +3,7 @@ package com.ihebbn.springsecurity.Email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -18,6 +19,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.mail.javamail.MimeMessageHelper.MULTIPART_MODE_MIXED;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @EnableAsync
 public class EmailService {
@@ -26,13 +28,14 @@ public class EmailService {
     private final SpringTemplateEngine templateEngine;
 
     @Async
-    public void sendEmail(String to,
-                          String username,
-                          EmailTemplateName emailTemplate,
-                          String confirmationUrl,
-                          String activationCode,
-                          String subject
-                          ) throws MessagingException {
+    public void sendEmail(
+            String to,
+            String username,
+            EmailTemplateName emailTemplate,
+            String confirmationUrl,
+            String activationCode,
+            String subject
+    ) throws MessagingException {
         String templateName;
         if (emailTemplate == null) {
             templateName = "confirm-email";
@@ -53,7 +56,7 @@ public class EmailService {
         Context context = new Context();
         context.setVariables(properties);
 
-        helper.setFrom("contact@ihebbn.com");
+        helper.setFrom("benslama.mohamediheb@gmail.com");
         helper.setTo(to);
         helper.setSubject(subject);
 
@@ -62,7 +65,5 @@ public class EmailService {
         helper.setText(template, true);
 
         mailSender.send(mimeMessage);
-
-
     }
 }
