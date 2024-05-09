@@ -17,20 +17,17 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 mail:
-  host: localhost
+  host: mail-dev
   port: 1025
-  username: iheb
-  password: iheb
   properties:
     mail:
       smtp:
-        trust: "*"
-      auth: true
-      starttls:
-        enable: true
-      connectiontimout: 5000
-      timeout: 3000
-      writetimout: 5000
+        auth: false
+        starttls:
+          enable: false
+      socketFactory:
+        class: javax.net.ssl.SSLSocketFactory
+        fallback: false
 
 application:
   security:

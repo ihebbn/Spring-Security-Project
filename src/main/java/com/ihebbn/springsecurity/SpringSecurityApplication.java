@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import java.time.LocalDateTime;
+
 @SpringBootApplication
 @EnableJpaAuditing
 public class SpringSecurityApplication {
@@ -19,7 +21,11 @@ public class SpringSecurityApplication {
     public CommandLineRunner runner(RoleRepository roleRepository) {
         return args -> {
             if (roleRepository.findByName("USER").isEmpty()) {
-                roleRepository.save(Role.builder().name("USER").build());
+                Role role = Role.builder()
+                        .name("USER")
+                        .createdDate(LocalDateTime.now()) // Initialize created_date with current timestamp
+                        .build();
+                roleRepository.save(role);
             }
         };
     }

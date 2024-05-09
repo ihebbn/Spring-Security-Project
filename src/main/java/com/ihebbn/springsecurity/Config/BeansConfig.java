@@ -41,11 +41,12 @@ public class BeansConfig {
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        // Configure mail sender properties
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
+        mailSender.setHost("mail-dev"); // Update host to match Docker Compose service name
+        mailSender.setPort(1025); // Use the port exposed by MailDev service
         // Set other properties like username and password if required
         return mailSender;
     }
+
+
 
 }

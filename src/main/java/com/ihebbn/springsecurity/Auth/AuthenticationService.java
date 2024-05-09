@@ -8,6 +8,7 @@ import com.ihebbn.springsecurity.User.TokenRepository;
 import com.ihebbn.springsecurity.User.User;
 import com.ihebbn.springsecurity.User.UserRepository;
 import jakarta.mail.MessagingException;
+import jakarta.mail.Session;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Properties;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class AuthenticationService {
     private String activationUrl;
 
     public void register(RegistrationRequest request) throws MessagingException {
-        var userRole = roleRepository.findByName("U SER")
+        var userRole = roleRepository.findByName("USER")
                 // todo - better exception handling
                 .orElseThrow(() -> new IllegalStateException("ROLE USER was not initiated"));
         var user = User.builder()
@@ -41,22 +43,35 @@ public class AuthenticationService {
                 .accountLocked(false)
                 .enabled(false)
                 .roles(List.of(userRole))
+                .createdDate(LocalDateTime.now()) // CreatedDate here
                 .build();
         userRepository.save(user);
         sendValidationEmail(user);
     }
 
+
     private void sendValidationEmail(User user) throws MessagingException {
         var newToken = generateAndSaveActivationToken(user);
-        //send Email
+
+        Properties properties = new Properties();
+        properties.setProperty("mail.smtp.starttls.enable", "false");
+        properties.setProperty("mail.smtp.auth", "false");
+        properties.setProperty("mail.smtp.connectiontimeout", "5000");
+        properties.setProperty("mail.smtp.timeout", "3000");
+        properties.setProperty("mail.smtp.writetimeout", "5000");
+
+        Session session = Session.getInstance(properties);
+
         emailService.sendEmail(
                 user.getEmail(),
                 user.fullName(),
                 EmailTemplateName.ACTIVATE_ACCOUNT,
                 activationUrl,
                 newToken,
-                "Account activation"
-        );    }
+                "Account activation",
+                session
+        );
+    }
 
     private String generateAndSaveActivationToken(User user) {
         //generate a token

@@ -1,6 +1,7 @@
 package com.ihebbn.springsecurity.Email;
 
 import jakarta.mail.MessagingException;
+import jakarta.mail.Session;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,15 +35,17 @@ public class EmailService {
             EmailTemplateName emailTemplate,
             String confirmationUrl,
             String activationCode,
-            String subject
+            String subject,
+            Session session
     ) throws MessagingException {
+
         String templateName;
         if (emailTemplate == null) {
             templateName = "confirm-email";
         } else {
             templateName = emailTemplate.name();
         }
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessage mimeMessage = new MimeMessage(session);
         MimeMessageHelper helper = new MimeMessageHelper(
                 mimeMessage,
                 MULTIPART_MODE_MIXED,

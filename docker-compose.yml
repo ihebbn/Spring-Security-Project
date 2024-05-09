@@ -19,6 +19,10 @@ services:
   mail-dev:
     container_name: mail-dev-ss
     image: maildev/maildev
+    environment:
+      - MAILDEV_SMTP_DISABLE_AUTH_LOGIN=true
+      - MAILDEV_SMTP_DISABLE_AUTH_PLAIN=true
+      - MAILDEV_SMTP_DISABLE_STARTTLS=true
     ports:
       - "1080:1080"
       - "1025:1025"

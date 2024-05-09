@@ -47,7 +47,7 @@ public class User implements UserDetails, Principal {
     private boolean enabled;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name = "created_date")
     private LocalDateTime createdDate;
 
     @LastModifiedDate
